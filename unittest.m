@@ -57,6 +57,21 @@ function unittest()
 		assert(close(x2, x2c));
 	end
 
+	% is_smooth
+	pp = pp_cat(pp_constant(1, 0, 3), ...
+	            pp_constant(1, 0, 3));
+	assert(pp_is_smooth(pp, 2));
+	pp = pp_cat(pp_constant(1, 0, 3), ...
+	            pp_constant(1, 1, 3));
+	assert(~pp_is_smooth(pp, 0));
+	pp = pp_cat(pp_linear(1, 0, 1, 3), ...
+	            pp_linear(1, 1, 3, 3));
+	assert(pp_is_smooth(pp, 0));
+	assert(~pp_is_smooth(pp, 1));
+	pp = pp_cat(pp_linear(1, 0, 1, 3), ...
+	            pp_linear(1, 1, 2, 3));
+	assert(pp_is_smooth(pp, 1));
+
 	% I can't think of a way to test pp_sample_piece
 	% other than re-implementing the exact function...
 

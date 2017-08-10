@@ -42,23 +42,25 @@ function unittest()
 
 	% concat
 	for i=1:100
-		[pp1, pp2] = pp_random();
-		dur1 = pp1.breaks(end) - pp1.breaks(1);
-		dur2 = pp2.breaks(end) - pp2.breaks(1);
-		tbreak = pp1.breaks(end);
-		ppc = pp_cat(pp1, pp2);
+		npps = randi(6) - 1;
+		pps = pp_random(npps);
+		ppc = pp_cat(pps{:});
 
-		tscl = 0:0.001:1;
-		tscl = tscl(1:(end-1));
-		t1 = pp1.breaks(1) + dur1 * tscl;
-		x1 = ppval(pp1, t1);
-		x1c = ppval(ppc, t1);
-		assert(close(x1, x1c));
-
-		t2 = dur2 * tscl;
-		x2 = ppval(pp2, pp2.breaks(1) + t2);
-		x2c = ppval(ppc, tbreak + t2);
-		assert(close(x2, x2c));
+		if npps == 0
+			assert(isempty(ppc));
+		else
+			% not [0, 1] bc float errors
+			tscl = 0.001:0.001:0.999;
+			t0_cat = pps{1}.breaks(1);
+			for j=1:npps
+				t0 = pps{j}.breaks(1);
+				dur = pps{j}.breaks(end) - t0;
+				xj = ppval(pps{j}, t0 + dur * tscl);
+				xc = ppval(ppc, t0_cat + dur * tscl);
+				assert(close(xj, xc));
+				t0_cat = t0_cat + dur;
+			end
+		end
 	end
 
 	% is_smooth

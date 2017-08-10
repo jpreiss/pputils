@@ -1,7 +1,18 @@
-% concatenates two piecewise polynomials.
-% preserves the breaks of pp1.
-% if one is an empty array, returns the other one unmodified.
-function pp = pp_cat(pp1, pp2)
+% concatenates any number of piecewise polynomials.
+function pp = pp_cat(varargin)
+	if nargin == 0
+		pp = [];
+	elseif nargin == 1
+		pp = varargin{1};
+	else
+		split = floor(nargin / 2);
+		pp_left = pp_cat(varargin{1:split});
+		pp_right = pp_cat(varargin{(split+1):nargin});
+		pp = pp_cat_2(pp_left, pp_right);
+	end
+end
+
+function pp = pp_cat_2(pp1, pp2)
 	if isempty(pp1)
 		pp = pp2;
 	elseif isempty(pp2)

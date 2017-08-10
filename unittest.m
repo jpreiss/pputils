@@ -4,6 +4,10 @@ function unittest()
 	pp = pp_constant(1, pi, 11);
 	assert(pp.order == 11);
 	assert(ppval(pp, 0) == pi);
+	pp = pp_constant(2, magic(3), 3);
+	assert(pp.order == 3);
+	is_eq = ppval(pp, 1.23) == magic(3);
+	assert(all(is_eq(:)));
 
 	% linear
 	for i=1:100
@@ -71,6 +75,15 @@ function unittest()
 	pp = pp_cat(pp_linear(1, 0, 1, 3), ...
 	            pp_linear(1, 1, 2, 3));
 	assert(pp_is_smooth(pp, 1));
+
+	% cat_dim
+	pp1 = pp_constant(1, [1 0], 3);
+	pp1 = pp_cat(pp1, pp1); % to have breaks
+	pp2 = pp_constant(1, [1 2 3], 3);
+	pp2 = pp_cat(pp2, pp2);
+	pp = pp_cat_dim(2, pp1, pp2);
+	val = ppval(pp, 1.3);
+	assert(all(val == [1 0 1 2 3]));
 
 	% I can't think of a way to test pp_sample_piece
 	% other than re-implementing the exact function...

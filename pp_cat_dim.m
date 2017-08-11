@@ -10,7 +10,7 @@
 function pp = pp_cat_dim(catdim, pp1, pp2)
 	[breaks1, coefs1, k1, order1, dim1] = unmkpp(pp1);
 	[breaks2, coefs2, k2, order2, dim2] = unmkpp(pp2);
-	assert(all(breaks1 == breaks2));
+	assert(all(abs(breaks1(:) - breaks2(:)) < 10e-9));
 	assert(k1 == k2);
 	% TODO: could relax
 	assert(order1 == order2);

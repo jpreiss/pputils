@@ -3,6 +3,9 @@
 % dimensionality of p is unrestricted.
 function pp = pp_constant(t, p, order)
 	sz = size(p);
+	if isscalar(p)
+		sz = 1;
+	end
 	coefs = zeros([prod(sz) order]);
 	coefs(:,end) = p(:);
 	breaks = [0 t];

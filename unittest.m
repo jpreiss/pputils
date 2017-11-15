@@ -87,6 +87,35 @@ function unittest()
 	val = ppval(pp, 1.3);
 	assert(all(val == [1 0 1 2 3]));
 
+	% select_pieces
+	pp1 = pp_constant(1, [0 0], 3);
+	pp2 = pp_constant(2, [1 2], 3);
+	pp3 = pp_constant(3, [2 4], 3);
+	pps = {pp1, pp2, pp3};
+	pp = pp_cat(pps{:});
+	for i=1:3
+		ppq = pp_select_pieces(pp, i);
+		ppq.breaks = ppq.breaks - ppq.breaks(1);
+		assert(pp_almost_same(ppq, pps{i}));
+	end
+	assert(pp_almost_same(...
+		pp_cat(pp1, pp2), ...
+		pp_select_pieces(pp, [1 2])));
+
+	% replace_pieces
+	pp1 = pp_constant(1, [0 0], 3);
+	pp2 = pp_constant(2, [1 2], 3);
+	pp3 = pp_constant(3, [2 4], 3);
+	pp = pp_cat(pps{:});
+	ppr1 = pp_replace_pieces(pp, 2, pp3);
+	assert(pp_almost_same(pp_select_pieces(ppr1, 2), pp3));
+	ppr2 = pp_replace_pieces(pp, 1, pp3);
+	assert(pp_almost_same(pp_select_pieces(ppr2, 1), pp3));
+	ppr3 = pp_replace_pieces(pp, [2 3], pp1);
+	assert(pp_almost_same(pp_select_pieces(ppr3, 2), pp1));
+	assert(ppr3.pieces == 2);
+	% TODO more thorough tests of this
+
 	% I can't think of a way to test pp_sample_piece
 	% other than re-implementing the exact function...
 

@@ -1,5 +1,5 @@
 % scales the breaks of the piecewise polynomial.
-% i.e. if pp has breaks [1, ..., 3], ppstretch has breaks [1, ..., 5]
+% i.e. if pp has breaks [1, ..., 3], ppstretch(pp, 2) has breaks [1, ..., 5]
 % and evaluates to the same values over that interval.
 function ppstretch = pp_stretch(pp, scale)
 	[breaks, coefs, k, order, dim] = unmkpp(pp);
